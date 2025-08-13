@@ -1,0 +1,1 @@
+export const serverURL="https://job-portal-backend-g6nx.onrender.com"
