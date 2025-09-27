@@ -3,40 +3,37 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import ManageJob from './ManageJob';
 import { deleteJobAPI } from '../service/allApi';
+import { toast } from 'react-toastify';
 
-function JobCard({job,setISjobAdded,setISjobUpdated}) {
+function JobCard({ job, setISjobAdded, setISjobUpdated }) {
 
-const handleDelete=async(id)=>{
-  console.log(id);
-
-  try {
-    const result=await deleteJobAPI(id)
-    console.log(result);
-    setISjobAdded(result)
-    
-  } catch (error) {
-    console.log(error);
-    
-    
-  }
-  
-
-}
+  const handleDelete = async (id) => {
+    try {
+      const result = await deleteJobAPI(id);
+      setISjobAdded(result);
+      toast.error("job deleted")
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <Card style={{ width: "18rem" }}>
+    <Card className="shadow-sm border-0 mb-4" style={{ width: "100%" }}>
       <Card.Body>
-        <Card.Title>{job?.jobTitile}</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">{job?.company}</Card.Subtitle>
-        <Card.Subtitle className="mb-2 text-muted">{job?.location}</Card.Subtitle>
-        <Card.Subtitle className="mb-2 text-muted">{job?.salary}</Card.Subtitle>
-
-        <Card.Text>
-         {job?.description}
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <Card.Title className="fw-bold text-primary">{job?.jobTitle}</Card.Title>
+          <span className="badge bg-secondary">{job?.salary}</span>
+        </div>
+        <Card.Subtitle className="mb-1 text-muted">{job?.company}</Card.Subtitle>
+        <Card.Subtitle className="mb-3 text-muted">{job?.location}</Card.Subtitle>
+        <Card.Text className="text-dark" style={{ minHeight: "80px" }}>
+          {job?.description}
         </Card.Text>
-        <div className="d-flex justify-content-around">
-            <ManageJob isEdit={true} jobId={job?.id} setISjobUpdated={setISjobUpdated}/>
-            <Button onClick={()=>handleDelete(job?.id)} variant="danger">Delete</Button>
+        <div className="d-flex justify-content-between mt-3">
+          <ManageJob isEdit={true} jobId={job?.id} setISjobUpdated={setISjobUpdated} />
+          <Button onClick={() => handleDelete(job?.id)} variant="outline-danger">
+            Delete
+          </Button>
         </div>
       </Card.Body>
     </Card>

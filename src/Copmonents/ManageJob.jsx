@@ -7,6 +7,7 @@ import {
   geteditJobDataAPI,
   updateditJobDataAPI,
 } from "../service/allApi";
+import { toast } from "react-toastify";
 
 function ManageJob({ isEdit, setISjobAdded, jobId, setISjobUpdated }) {
   console.log(jobId);
@@ -22,15 +23,24 @@ function ManageJob({ isEdit, setISjobAdded, jobId, setISjobUpdated }) {
   //post api call for data sent
   const handleAddJob = async () => {
     const { jobTitle, company, location, salary, description } = jobData;
-    
+
     console.log(jobTitle, company, location, salary, description);
     if (!jobTitle || !company || !location || !salary || !description) {
-      alert("fill the data");
+      toast.warning("fill the data");
     } else {
       try {
         const result = await addJobDataAPI(jobData);
         console.log(result);
         setISjobAdded(result);
+        setJobData({
+          jobTitle: "",
+          company: "",
+          location: "",
+          salary: "",
+          description: "",
+        });
+        toast.success("job added");
+
         handleClose();
       } catch (error) {
         console.log(error);
@@ -54,7 +64,7 @@ function ManageJob({ isEdit, setISjobAdded, jobId, setISjobUpdated }) {
     const { jobTitle, company, location, salary, description } = jobData;
     console.log(jobTitle, company, location, salary, description);
     if (!jobTitle || !company || !location || !salary || !description) {
-      alert("fill the data");
+      toast.warning("fill the data");
     } else {
       try {
         const result = await updateditJobDataAPI(jobId, jobData);
@@ -74,9 +84,8 @@ function ManageJob({ isEdit, setISjobAdded, jobId, setISjobUpdated }) {
   const handleClose = () => setShow(false);
   const handleShow = async () => {
     //edit data modalshow
-    if(isEdit && jobId){
-      await  editJobData();
-
+    if (isEdit && jobId) {
+      await editJobData();
     }
     setShow(true);
   };
@@ -106,76 +115,68 @@ function ManageJob({ isEdit, setISjobAdded, jobId, setISjobUpdated }) {
           )}
         </Modal.Header>
         <Modal.Body>
-          <div>
-            <label>Job title</label>
-            <input
-              value={jobData.jobTitle}
-              onChange={(e) =>
-                setJobData({ ...jobData, jobTitle: e.target.value })
-              }
-              type="text"
-              name=""
-              id=""
-              placeholder="Job title"
-              className="form-control m-2"
-            />
-          </div>
-          <div>
-            <label>Company Name</label>
-            <input
-              value={jobData.company}
-              onChange={(e) =>
-                setJobData({ ...jobData, company: e.target.value })
-              }
-              type="text"
-              name=""
-              id=""
-              placeholder="Company Name"
-              className="form-control m-2"
-            />
-          </div>
-          <div>
-            <label>LOcation</label>
-            <input
-              value={jobData.location}
-              onChange={(e) =>
-                setJobData({ ...jobData, location: e.target.value })
-              }
-              type="text"
-              name=""
-              id=""
-              placeholder="Location"
-              className="form-control m-2"
-            />
-          </div>
-          <div>
-            <label>Salary</label>
-            <input
-              value={jobData.salary}
-              onChange={(e) =>
-                setJobData({ ...jobData, salary: e.target.value })
-              }
-              type="text"
-              name=""
-              id=""
-              placeholder="salary"
-              className="form-control m-2"
-            />
-          </div>
-          <div>
-            <label>Job Description</label>
-            <textarea
-              value={jobData.description}
-              onChange={(e) =>
-                setJobData({ ...jobData, description: e.target.value })
-              }
-              type="textarea"
-              name=""
-              id=""
-              placeholder="enter your Job Description"
-              className="form-control m-2"
-            />
-          </div>
+          <form className="px-2">
+            <div className="mb-3">
+              <label className="form-label">Job Title</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter job title"
+                value={jobData.jobTitle}
+                onChange={(e) =>
+                  setJobData({ ...jobData, jobTitle: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Company Name</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter company name"
+                value={jobData.company}
+                onChange={(e) =>
+                  setJobData({ ...jobData, company: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Location</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter location"
+                value={jobData.location}
+                onChange={(e) =>
+                  setJobData({ ...jobData, location: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Salary</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter salary"
+                value={jobData.salary}
+                onChange={(e) =>
+                  setJobData({ ...jobData, salary: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Job Description</label>
+              <textarea
+                className="form-control"
+                rows="3"
+                placeholder="Enter job description"
+                value={jobData.description}
+                onChange={(e) =>
+                  setJobData({ ...jobData, description: e.target.value })
+                }
+              />
+            </div>
+          </form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
